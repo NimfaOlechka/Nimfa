@@ -1,0 +1,14 @@
+.nav-header-main{
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #325;
+float: left;
+}
+.header-logo{
+display: block;
+}
+.header-login{
+display: block;
+}
