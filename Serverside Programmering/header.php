@@ -1,34 +1,42 @@
+<?php 
+session_start();
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta name =viewport content="width=device-width, initial-scale=1">
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<title>SEE YOU</title>
+	
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
 <header>
-	<nav class="nav-header-main">
-		<a class="header-logo" href="index.php">
-			<img src="img/img2.jpg" alt="banner">
-		</a>
-		<ul>
-			<li><a href="index.php">Home</a></li>
-			<li><a href="#">Portfolio</a></li>
-			<li><a href="#">About me</a></li>
-			<li><a href="#">Contact</a></li>
-		</ul>
-		<div class="header-login">
-			<form action="includes/login.php" method="post">
-				<input type="text" name="mailuid" placeholder="Username/Email">
-				<input type="password" name="pwd" placeholder="Password">
-				<button type="submit" name="login-submit">LOGIN</button>
-			</form>
-			<a href="includes/signin.php"> SIGN IN</a>
-			<form action="includes/logout.php">
-				<button type="submit" name="logout-submit">LOG OUT</button>
-			</form>
-		</div>
+	<nav class="w3-bar w3-teal">
+		<a href="index.php" class="w3-bar-item w3-button w3-mobile">Home</a>
+		<a href="profile.php" class="w3-bar-item w3-button w3-mobile">Profile</a>
+		<a href="education.php" class="w3-bar-item w3-button w3-mobile">Education</a>
+		<a href="myArt.php" class="w3-bar-item w3-button w3-mobile">My Art</a>	
+		<a href="myDiary.php" class="w3-bar-item w3-button w3-mobile">My Diary</a>	
 	</nav>
+<div class="w3-container">
+		<?php  
+			if (isset($_SESSION['uId'])){
+				echo '<form action="includes/logout.inc.php" class="w3-card-4">
+					<button class="w3-button w3-sand" type="submit" name="submit-logout">LOG OUT</button>
+				</form>';
+			}
+			else {
+				echo '<form action="includes/login.inc.php" method="post" class="w3-card-4">
+				<input type="text" name="uidmail" placeholder="Username/Email" class="w3-input">
+				<input type="password" name="pwd" placeholder="Password" class="w3-input">
+				<button type="submit" name="submit-login" class="w3-button w3-sand">LOGIN</button>
+				<a href="signin.php" class="w3-button"> SIGN IN</a>
+			</form>';
+			}
+		?>		
+	</div>	
+	
 </header>
  
