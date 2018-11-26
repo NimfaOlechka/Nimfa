@@ -1,59 +1,73 @@
 <?php
 session_start();
 
+//inserting or updating userprofile table
+
 if (isset($_POST['submit-profile'])) {
 
 	//db connection
 	require 'dbconn.inc.php';
 
 	//store variables
+	$id = $_SESSION['uId'];
+
 	$fname = $_POST['fname'];
 	$lname = $_POST['lname'];
 	$bcity = $_POST['bcity'];
 	$bday = $_POST['bday'];
-	#$gender = $_POST['gender'];
-
-	$file = $_FILES['ufoto'];
 	
 
-	$fileName = $_FILES['file']['name'];
-	$fileTmpName = $_FILES['file']['tmp_name'];
-	$fileSize = $_FILES['file']['size'];
-	$fileError = $_FILES['file']['error'];
-	$fileType = $_FILES['file']['type'];
-	
-	//splitting name into 2 strings by '.' delimiter 
-	$fileExt = explode('.', $fileName);
-	$fileActualExt = strtolower(end($fileExt));
-	//allowed extensions
-	$allowed = array('jpg', 'jpeg', 'png', 'gif');
-
-	if (in_array($fileActualExt, $allowed)){
-		if($fileError === 0){
-			if ($fileSize < 1000000) {
-
-				$fileNameNew = uniqid('', true).".".$fileActualExt;
-				//destination of file
-				$fileDestination = '../upload/'.$fileNameNew;
-				move_uploaded_file($fileTmpName, $fileDestination);
-
-				header("Location: ../myart.php");
-			} else {
-				echo "Your file is too big!";
-			}
-		} else {
-			echo "There was an error uploading your file!";
-		}
-	} else {
-		echo "You can't upload files of this type!";
+	if (!preg_match("/^[a-zA-Z]*$/", $fname)) {
+		header("Location: ../profile.php?error=invalidFName");
+		exit();
 	}
-	
+	else if(!preg_match("/^[a-zA-Z]*$/", $lname)){
+		header("Location: ../profile.php?error=invalidLName");
+		exit();
+	}
+	else if (!preg_match("/^[a-zA-Z]*$/", $bcity)) {
+		header("Location: ../profile.php?error=invalidCity");
+		exit();
+	}
+	else {
+		
+		$sqlChk = "SELECT * FROM userprofile WHERE userID = '$id'";
+		$resultChk = mysqli_query($conn, $sqlChk);
 
-	
+		if (mysqli_num_rows($resultChk) > 0) {
 
+			$sql = "UPDATE userprofile SET userFName = ?, userLName = ?, userBirthday = ?, userCity = ? WHERE userID = '$id'";
+			$stmt = mysqli_stmt_init($conn);
 
+			//check statement
+			if(!mysqli_stmt_prepare($stmt, $sql)){
+				header("Location: ../profile.php?error=sqlerror");
+				exit();
+			} else {
+				mysqli_stmt_bind_param($stmt, "ssss", $fname, $lname, $bday, $bcity);					
+			}		
+		} else {
+			# insert new
+			$sql = "INSERT INTO userprofile (userID, userFName, userLName, userBirthday, userCity) VALUES (?,?,?,?,?)";	
+			$stmt = mysqli_stmt_init($conn);
+
+			if (!mysqli_stmt_prepare($stmt, $sql)) {
+				header("Location: ../profile.php?error=sqlerror");
+				exit();
+			} else {
+				mysqli_stmt_bind_param($stmt, "sssss",$id, $fname, $lname, $bday, $bcity);
+			}	
+		}
+
+		mysqli_stmt_execute($stmt);	
+		
+		mysqli_stmt_close($stmt);
+		mysqli_close($conn);		
+		header("Location:../index.php?success");
+	}	
 }
 
-
-
 ?>
+
+
+	

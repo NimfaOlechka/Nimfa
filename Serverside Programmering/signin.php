@@ -38,16 +38,30 @@ require "header.php"
 					echo 'Sign Up with us today!';
 				}
 			?>
-			<form class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin" action="includes/signin.inc.php" method="post">
+			<form id="signin-form "class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin" action="includes/signin.inc.php" method="post">
 				<input type="text" name="uid" placeholder="Username" class="w3-input">
 				<input type="text" name="email" placeholder="E-mail" class="w3-input">
 				<input type="password" name="psd" placeholder="Password" class="w3-input">
 				<input type="password" name="rpsd" placeholder="Repeat password" class="w3-input">
-				<button type="submit" name="submit-signin" class="w3-button">SIGN UP</button>
+				<button id="signin-btn" type="submit" name="submit-signin" class="w3-button">SIGN UP</button>
 			</form>
 		</section>
 	</div>
 </main>
+
+<script>
+	$(document).ready(function(){
+		$('#signin-form').onsubmit((e)=>{
+			e.preventDefaults();
+			$.ajax({
+				url: "includes/signin.inc.php",
+				type: "POST"
+			});
+		});
+	});
+	
+</script>
+	
 
 <?php 
 require "footer.php"

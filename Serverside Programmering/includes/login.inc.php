@@ -35,10 +35,11 @@ if (isset($_POST['submit-login'])){
 				}
 				else if ($psdCheck == true){
 					session_start();
+
 					$_SESSION['uId'] = $row['userId'];
 					$_SESSION['userName'] = $row['userName'];
 
-					header("Location: ../profile.php?login=success");
+					header("Location: ../index.php?login=success");
 					exit();
 				}
 				else {
